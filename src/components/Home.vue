@@ -13,35 +13,37 @@
       </div>
       <button
         @click="newTask"
-        class="ml-auto bg-blue-500 py-2 px-4 rounded-md text-white hover:bg-blue-400 "
+        class="ml-auto bg-blue-500 py-2 px-4 rounded-md text-white hover:bg-blue-400  transition duration-300 ease-in-out"
       >
         Nova Tarefa
       </button>
     </div>
-    <div v-if="isAddingTask" class="p-4 rounded flex ">
-      <div class="ml-2">
-        <input type="checkbox" v-model="newTaskDone" />
-      </div>
-      <div class="flex-1 pl-4">
-        <div class="mb-2">
-          <input
-            ref="teste"
-            type="text"
-            placeholder="Título"
-            v-model="newTaskTitle"
-            class="p-2 w-full border border-gray-400 rounded-sm"
-          />
+    <div v-if="isAddingTask" class="p-4 rounded flex flex-col lg:flex-row">
+      <div class="flex flex-1">
+        <div class="ml-2">
+          <input type="checkbox" v-model="newTaskDone" />
         </div>
-        <div>
-          <textarea
-            rows="2"
-            placeholder="Descrição"
-            v-model="newTaskDescription"
-            class="p-2 w-full border border-gray-400 rounded-sm"
-          ></textarea>
+        <div class="flex-1 pl-4">
+          <div class="mb-2">
+            <input
+              ref="teste"
+              type="text"
+              placeholder="Título"
+              v-model="newTaskTitle"
+              class="p-2 w-full border border-gray-400 rounded-sm"
+            />
+          </div>
+          <div>
+            <textarea
+              rows="2"
+              placeholder="Descrição"
+              v-model="newTaskDescription"
+              class="p-2 w-full border border-gray-400 rounded-sm"
+            ></textarea>
+          </div>
         </div>
       </div>
-      <div class="flex flex-col w-32 ml-4">
+      <div class="flex lg:flex-col ml-auto lg:ml-4">
         <button
           @click="saveNewTask"
           class="border border-gray-600 p-2 rounded text-gray-600 mb-2 hover:border-blue-600 hover:text-blue-600 "
@@ -50,37 +52,39 @@
         </button>
         <button
           @click="cancelNewTask"
-          class="border border-gray-500 p-2 rounded text-gray-500 hover:border-gray-600 hover:text-gray-600"
+          class="border border-gray-500 p-2 rounded text-gray-500 hover:border-gray-600 hover:text-gray-600 mb-2 ml-2 lg:ml-0"
         >
           Cancelar
         </button>
       </div>
     </div>
 
-    <div v-if="isEditingTask" class="p-4 rounded flex ">
-      <div class="ml-2">
-        <input type="checkbox" v-model="newTaskDone" />
-      </div>
-      <div class="flex-1 pl-4">
-        <div class="mb-2">
-          <input
-            ref="teste"
-            type="text"
-            placeholder="Título"
-            v-model="newTaskTitle"
-            class="p-2 w-full border border-gray-400 rounded-sm"
-          />
+    <div v-if="isEditingTask" class="p-4 rounded flex flex-col lg:flex-row">
+      <div class="flex flex-1">
+        <div class="ml-2">
+          <input type="checkbox" v-model="newTaskDone" />
         </div>
-        <div>
-          <textarea
-            rows="2"
-            placeholder="Descrição"
-            v-model="newTaskDescription"
-            class="p-2 w-full border border-gray-400 rounded-sm"
-          ></textarea>
+        <div class="flex-1 pl-4">
+          <div class="mb-2">
+            <input
+              ref="teste"
+              type="text"
+              placeholder="Título"
+              v-model="newTaskTitle"
+              class="p-2 w-full border border-gray-400 rounded-sm"
+            />
+          </div>
+          <div>
+            <textarea
+              rows="2"
+              placeholder="Descrição"
+              v-model="newTaskDescription"
+              class="p-2 w-full border border-gray-400 rounded-sm"
+            ></textarea>
+          </div>
         </div>
       </div>
-      <div class="flex flex-col w-32 ml-4">
+      <div class="flex lg:flex-col ml-auto lg:ml-4">
         <button
           @click="updateTask"
           class="border border-gray-600 p-2 rounded text-gray-600 mb-2 hover:border-blue-600 hover:text-blue-600 "
@@ -89,16 +93,17 @@
         </button>
         <button
           @click="cancelNewTask"
-          class="border border-gray-500 p-2 rounded text-gray-500 hover:border-gray-600 hover:text-gray-600"
+          class="border border-gray-500 p-2 rounded text-gray-500 hover:border-gray-600 hover:text-gray-600 mb-2 ml-2 lg:ml-0"
         >
           Cancelar
         </button>
       </div>
     </div>
+
     <div
       v-for="task in tasks"
       :key="task.id"
-      class="p-4 rounded flex border rounded my-2 border-gray-400"
+      class="p-4 rounded flex border rounded my-2 border-gray-400 "
       @dblclick="editTask(task)"
     >
       <div class="ml-2">
@@ -142,7 +147,7 @@
 <script>
 import axios from "axios";
 import MoonLoader from "vue-spinner/src/MoonLoader.vue";
-const BASE_URL = "http://159.65.218.85:8080"; //process.env.VUE_APP_BASEURL;
+const BASE_URL = process.env.VUE_APP_BASEURL;
 
 export default {
   name: "Home",
@@ -170,8 +175,11 @@ export default {
     toggleTask(task) {
       console.log("toggle: " + task.id);
       const patch = {
-        done: task.done
+        done: !task.done
       };
+
+      console.log("patch");
+      console.log(patch);
 
       axios.patch(BASE_URL + "/api/v1/tasks/" + task.id, patch);
     },
